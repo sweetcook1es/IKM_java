@@ -105,3 +105,4 @@ src/
 ```
 
 ## Структура базы данных:
+<img src="Images/Image9.png">
