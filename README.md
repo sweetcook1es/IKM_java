@@ -103,3 +103,5 @@ src/
 │       │   └── error.html
 │       └── application.properties
 ```
+
+## Структура базы данных:
