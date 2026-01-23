@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-documentation>
+
+    <metadata>
+        <project-name>Система управления "Печенька.ru"</project-name>
+        <version>1.0.0</version>
+        <description>Spring Boot веб-приложение для управления предприятием</description>
+    </metadata>
+
+
+    <controllers>
+        <controller>
+            <class>AuthController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>Управление аутентификацией и доступом</purpose>
+            <endpoints>
+                <endpoint>
+                    <method>GET /login</method>
+                    <description>Страница входа с обработкой ошибок</description>
+                </endpoint>
+                <endpoint>
+                    <method>GET /access-denied</method>
+                    <description>Страница отказа в доступе</description>
+                </endpoint>
+                <endpoint>
+                    <method>GET /</method>
+                    <description>Перенаправление на дашборд</description>
+                </endpoint>
+            </endpoints>
+        </controller>
+
+        <controller>
+            <class>DashboardController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>Главная панель с метриками</purpose>
+            <endpoints>
+                <endpoint>
+                    <method>GET /admin/dashboard</method>
+                    <description>Отображение дашборда с ключевыми метриками</description>
+                </endpoint>
+            </endpoints>
+            <dependencies>OrderRepository, ProductRepository, CustomerRepository, EmployeeRepository</dependencies>
+        </controller>
+
+        <controller>
+            <class>CategoryController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>CRUD для категорий товаров</purpose>
+            <base-path>/admin/categories</base-path>
+            <endpoints>
+                <endpoint>GET / - список категорий</endpoint>
+                <endpoint>GET /new - форма создания</endpoint>
+                <endpoint>POST / - сохранение категории</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>GET /{id} - просмотр категории</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /search - поиск по названию</endpoint>
+            </endpoints>
+            <business-rules>Уникальность названия, каскадное удаление товаров</business-rules>
+        </controller>
+
+        <controller>
+            <class>ProductController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>CRUD для товаров</purpose>
+            <base-path>/admin/products</base-path>
+            <endpoints>
+                <endpoint>GET / - список товаров</endpoint>
+                <endpoint>GET /new - форма создания</endpoint>
+                <endpoint>POST / - сохранение товара</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>POST /{id} - обновление товара</endpoint>
+                <endpoint>GET /{id} - просмотр товара</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /search - поиск по названию/описанию</endpoint>
+                <endpoint>GET /category/{categoryId} - товары по категории</endpoint>
+            </endpoints>
+            <dependencies>ProductService, CategoryService</dependencies>
+        </controller>
+
+        <controller>
+            <class>CustomerController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>CRUD для клиентов</purpose>
+            <base-path>/admin/customers</base-path>
+            <endpoints>
+                <endpoint>GET / - список клиентов</endpoint>
+                <endpoint>GET /new - форма создания</endpoint>
+                <endpoint>POST / - сохранение клиента</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>GET /{id} - просмотр клиента</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /search - поиск по ФИО/телефону</endpoint>
+            </endpoints>
+        </controller>
+
+        <controller>
+            <class>OrderController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>Управление заказами</purpose>
+            <base-path>/admin/orders</base-path>
+            <endpoints>
+                <endpoint>GET / - список заказов</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>POST /{id} - обновление заказа</endpoint>
+                <endpoint>GET /{id} - просмотр заказа</endpoint>
+                <endpoint>POST /{id}/update-status - изменение статуса</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /customer/{customerId} - заказы клиента</endpoint>
+                <endpoint>GET /status/{statusId} - заказы по статусу</endpoint>
+            </endpoints>
+            <dependencies>OrderService, CustomerService, OrderStatusService, ProductService</dependencies>
+        </controller>
+
+        <controller>
+            <class>EmployeeController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>CRUD для сотрудников</purpose>
+            <base-path>/admin/employees</base-path>
+            <endpoints>
+                <endpoint>GET / - список сотрудников</endpoint>
+                <endpoint>GET /new - форма создания</endpoint>
+                <endpoint>POST / - сохранение сотрудника</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>GET /{id} - просмотр сотрудника</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /search - поиск по ФИО/табельному номеру</endpoint>
+            </endpoints>
+            <business-rules>Уникальность табельного номера</business-rules>
+        </controller>
+
+        <controller>
+            <class>WarehouseController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>CRUD для складов</purpose>
+            <base-path>/admin/warehouses</base-path>
+            <endpoints>
+                <endpoint>GET / - список складов</endpoint>
+                <endpoint>GET /new - форма создания</endpoint>
+                <endpoint>POST / - сохранение склада</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>POST /{id} - обновление склада</endpoint>
+                <endpoint>GET /{id} - просмотр склада</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /search - поиск по адресу</endpoint>
+            </endpoints>
+            <business-rules>Уникальность адреса</business-rules>
+        </controller>
+
+        <controller>
+            <class>StockController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>CRUD для остатка товаров</purpose>
+            <base-path>/admin/stock</base-path>
+            <endpoints>
+                <endpoint>GET / - список остатков</endpoint>
+                <endpoint>GET /new - форма создания</endpoint>
+                <endpoint>POST / - сохранение остатка</endpoint>
+                <endpoint>GET /{id}/edit - форма редактирования</endpoint>
+                <endpoint>POST /{id}/update - обновление количества</endpoint>
+                <endpoint>POST /{id}/delete - удаление</endpoint>
+                <endpoint>GET /low - низкие остатки</endpoint>
+            </endpoints>
+            <business-rules>Уникальное сочетание товар-склад</business-rules>
+            <dependencies>StockService, ProductService, WarehouseService</dependencies>
+        </controller>
+
+        <controller>
+            <class>CustomErrorController</class>
+            <package>com.pechenka.app.controller</package>
+            <purpose>Глобальная обработка HTTP ошибок</purpose>
+            <endpoint>GET /error - обработка всех ошибок</endpoint>
+        </controller>
+    </controllers>
+
+    <entities>
+        <entity>
+            <class>Category</class>
+            <table>categories</table>
+            <purpose>Категории товаров</purpose>
+            <fields>
+                <field>id (category_id) - первичный ключ</field>
+                <field>name - уникальное название (max 100)</field>
+                <field>description - описание</field>
+            </fields>
+            <relationships>
+                <relationship>OneToMany → Product (каскадное удаление)</relationship>
+            </relationships>
+            <validations>
+                <validation>@NotBlank name</validation>
+                <validation>@Size(max=100) name</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>Product</class>
+            <table>products</table>
+            <purpose>Товары предприятия</purpose>
+            <fields>
+                <field>id (product_id) - первичный ключ</field>
+                <field>name - название (max 200)</field>
+                <field>description - описание</field>
+                <field>price - цена (Decimal(10,2))</field>
+                <field>category_id - внешний ключ</field>
+            </fields>
+            <relationships>
+                <relationship>ManyToOne → Category</relationship>
+                <relationship>OneToMany → Stock (каскадное удаление)</relationship>
+                <relationship>OneToMany → OrderItem</relationship>
+            </relationships>
+            <validations>
+                <validation>@NotBlank name</validation>
+                <validation>@NotNull price</validation>
+                <validation>@DecimalMin("0.01") price</validation>
+                <validation>@NotNull category</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>Customer</class>
+            <table>customers</table>
+            <purpose>Клиенты предприятия</purpose>
+            <fields>
+                <field>id (customer_id) - первичный ключ</field>
+                <field>full_name - ФИО (max 50)</field>
+                <field>phone - телефон (уникальный)</field>
+            </fields>
+            <relationships>
+                <relationship>OneToMany → Order (каскадное удаление)</relationship>
+            </relationships>
+            <validations>
+                <validation>@NotBlank fullName</validation>
+                <validation>@Pattern phone</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>Employee</class>
+            <table>employees</table>
+            <purpose>Сотрудники (пользователи системы)</purpose>
+            <fields>
+                <field>id (employee_id) - первичный ключ</field>
+                <field>personnel_number - табельный номер (уникальный, max 20)</field>
+                <field>full_name - ФИО (max 50)</field>
+                <field>role - роль (Администратор/Комплектовщик/Оператор/Аналитик)</field>
+            </fields>
+            <relationships>
+                <relationship>OneToMany → WarehouseOperation</relationship>
+            </relationships>
+            <methods>
+                <method>getSurname() - извлечение фамилии для аутентификации</method>
+            </methods>
+            <validations>
+                <validation>@NotBlank personnelNumber</validation>
+                <validation>@NotBlank fullName</validation>
+                <validation>@Pattern role (разрешенные значения)</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>Order</class>
+            <table>orders</table>
+            <purpose>Заказы клиентов</purpose>
+            <fields>
+                <field>id (order_id) - первичный ключ</field>
+                <field>creation_date - дата создания</field>
+                <field>status_id - внешний ключ</field>
+                <field>customer_id - внешний ключ</field>
+            </fields>
+            <special-feature>@NamedEntityGraph для оптимизации загрузки</special-feature>
+            <relationships>
+                <relationship>ManyToOne → Customer (EAGER)</relationship>
+                <relationship>ManyToOne → OrderStatus (EAGER)</relationship>
+                <relationship>OneToMany → OrderItem (каскадное удаление)</relationship>
+                <relationship>OneToMany → WarehouseOperation</relationship>
+            </relationships>
+            <methods>
+                <method>getTotalAmount() - расчет суммы заказа</method>
+            </methods>
+        </entity>
+
+        <entity>
+            <class>OrderItem</class>
+            <table>order_items</table>
+            <purpose>Позиции в заказе</purpose>
+            <unique-constraint>order_id + product_id</unique-constraint>
+            <fields>
+                <field>id (order_item_id) - первичный ключ</field>
+                <field>order_id - внешний ключ</field>
+                <field>product_id - внешний ключ</field>
+                <field>quantity - количество</field>
+                <field>price_at_order - цена на момент заказа (Decimal(10,2))</field>
+            </fields>
+            <relationships>
+                <relationship>ManyToOne → Order</relationship>
+                <relationship>ManyToOne → Product</relationship>
+            </relationships>
+            <methods>
+                <method>getItemTotal() - расчет суммы позиции</method>
+            </methods>
+            <validations>
+                <validation>@NotNull order</validation>
+                <validation>@NotNull product</validation>
+                <validation>@Min(1) quantity</validation>
+                <validation>@NotNull priceAtOrder</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>OrderStatus</class>
+            <table>order_statuses</table>
+            <purpose>Статусы заказов</purpose>
+            <fields>
+                <field>id (status_id) - первичный ключ</field>
+                <field>name - название статуса (уникальное, max 50)</field>
+            </fields>
+            <relationships>
+                <relationship>OneToMany → Order</relationship>
+            </relationships>
+            <validations>
+                <validation>@NotBlank name</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>Warehouse</class>
+            <table>warehouses</table>
+            <purpose>Склады предприятия</purpose>
+            <fields>
+                <field>id (warehouse_id) - первичный ключ</field>
+                <field>address - адрес склада (уникальный, max 200)</field>
+            </fields>
+            <relationships>
+                <relationship>OneToMany → Stock</relationship>
+            </relationships>
+            <validations>
+                <validation>@NotBlank address</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>Stock</class>
+            <table>stock</table>
+            <purpose>Остатки товаров на складах</purpose>
+            <unique-constraint>product_id + warehouse_id</unique-constraint>
+            <fields>
+                <field>id (stock_id) - первичный ключ</field>
+                <field>product_id - внешний ключ</field>
+                <field>warehouse_id - внешний ключ</field>
+                <field>quantity - количество</field>
+            </fields>
+            <relationships>
+                <relationship>ManyToOne → Product</relationship>
+                <relationship>ManyToOne → Warehouse</relationship>
+            </relationships>
+            <validations>
+                <validation>@NotNull product</validation>
+                <validation>@NotNull warehouse</validation>
+                <validation>@Min(0) quantity</validation>
+            </validations>
+        </entity>
+
+        <entity>
+            <class>WarehouseOperation</class>
+            <table>warehouse_operations</table>
+            <purpose>Операции на складе</purpose>
+            <fields>
+                <field>id (operation_id) - первичный ключ</field>
+                <field>order_id - внешний ключ</field>
+                <field>employee_id - внешний ключ</field>
+                <field>operation_date - дата операции</field>
+            </fields>
+            <relationships>
+                <relationship>ManyToOne → Order</relationship>
+                <relationship>ManyToOne → Employee</relationship>
+            </relationships>
+        </entity>
+
+
+    </entities>
+
+    <repositories>
+        <repository>
+            <class>CategoryRepository</class>
+            <interface>JpaRepository&lt;Category, Integer&gt;</interface>
+            <methods>
+                <method>findByName(String name) - поиск по названию</method>
+                <method>findByNameContaining(String keyword) - поиск по части названия</method>
+            </methods>
+        </repository>
+
+        <repository>
+            <class>ProductRepository</class>
+            <interface>JpaRepository&lt;Product, Integer&gt;</interface>
+            <methods>
+                <method>findByCategoryId(Integer categoryId) - товары по категории</method>
+                <method>searchByNameOrDescription(String keyword) - полнотекстовый поиск</method>
+                <method>findAllSortedByName() - сортировка по названию</method>
+                <method>findAllWithDetails() - товары с категориями и остатками</method>
+            </methods>
+        </repository>
+
+        <repository>
+            <class>CustomerRepository</class>
+            <interface>JpaRepository&lt;Customer, Integer&gt;</interface>
+            <methods>
+                <method>searchByNameOrPhone(String keyword) - универсальный поиск</method>
+            </methods>
+        </repository>
+
+        <repository>
+            <class>EmployeeRepository</class>
+            <interface>JpaRepository&lt;Employee, Integer&gt;</interface>
+            <methods>
+                <method>findByPersonnelNumber(String personnelNumber) - поиск по табельному номеру</method>
+                <method>searchByNameOrPersonnelNumber(String keyword) - универсальный поиск</method>
+            </methods>
+        </repository>
+
+        <repository>
+            <class>OrderRepository</class>
+            <interface>JpaRepository&lt;Order, Integer&gt;</interface>
+            <methods>
+                <method>findByCustomerId(Integer customerId) - заказы клиента</method>
+                <method>findByStatusId(Integer statusId) - заказы по статусу</method>
+                <method>findByIdWithFullDetails(Integer id) - заказ с полными деталями</method>
+                <method>getTotalRevenue() - общая выручка</method>
+            </methods>
+        </repository>
+
+        <repository>
+            <class>WarehouseRepository</class>
+            <interface>JpaRepository&lt;Warehouse, Integer&gt;</interface>
+            <methods>
+                <method>findByAddressContaining(String keyword) - поиск по адресу</method>
+                <method>deleteIfEmpty(Integer id) - безопасное удаление</method>
+                <method>forceDelete(Integer id) - принудительное удаление</method>
+            </methods>
+        </repository>
+
+        <repository>
+            <class>StockRepository</class>
+            <interface>JpaRepository&lt;Stock, Integer&gt;</interface>
+            <methods>
+                <method>findAllWithDetails() - остатки с товарами и складами</method>
+                <method>findByIdWithDetails(Integer id) - остаток с деталями</method>
+                <method>findByProductIdAndWarehouseId(Integer productId, Integer warehouseId) - поиск по товару и складу</method>
+                <method>findByProductId(Integer productId) - остатки товара</method>
+                <method>findByWarehouseId(Integer warehouseId) - остатки на складе</method>
+                <method>findLowStock(Integer threshold) - низкие остатки</method>
+                <method>deleteAllByWarehouseId(Integer warehouseId) - удаление всех остатков склада</method>
+            </methods>
+        </repository>
+    </repositories>
+
+    <services>
+        <service>
+            <class>CategoryService</class>
+            <dependencies>CategoryRepository</dependencies>
+            <methods>
+                <method>findAll(), findById(), save(), delete()</method>
+                <method>findByName() - для проверки уникальности</method>
+                <method>findByNameContaining() - поиск</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>ProductService</class>
+            <dependencies>ProductRepository</dependencies>
+            <methods>
+                <method>findAll() - отсортировано по названию</method>
+                <method>findById(), save(), delete()</method>
+                <method>findByCategoryId() - фильтрация</method>
+                <method>search() - поиск</method>
+                <method>findAllWithDetails() - с категориями и остатками</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>CustomerService</class>
+            <dependencies>CustomerRepository</dependencies>
+            <methods>
+                <method>findAll(), findById(), save(), delete()</method>
+                <method>searchByNameOrPhone() - универсальный поиск</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>EmployeeService</class>
+            <dependencies>EmployeeRepository</dependencies>
+            <methods>
+                <method>findAll(), findById(), save(), delete()</method>
+                <method>searchByNameOrPersonnelNumber() - поиск</method>
+                <method>findByPersonnelNumber() - для аутентификации</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>OrderService</class>
+            <dependencies>OrderRepository, OrderStatusService</dependencies>
+            <methods>
+                <method>findAll(), findById(), save(), delete()</method>
+                <method>findByIdWithDetails() - заказ с деталями</method>
+                <method>findByCustomerId(), findByStatusId() - фильтрация</method>
+                <method>updateStatus() - изменение статуса</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>WarehouseService</class>
+            <dependencies>WarehouseRepository, StockRepository, EntityManager</dependencies>
+            <methods>
+                <method>findAll(), findById(), save()</method>
+                <method>findByAddressContaining() - поиск</method>
+                <method>delete() - безопасное удаление с очисткой остатков</method>
+                <method>updateWarehouseAddress() - обновление адреса</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>StockService</class>
+            <dependencies>StockRepository</dependencies>
+            <methods>
+                <method>findAll() - с деталями</method>
+                <method>findById() - с деталями</method>
+                <method>save(), delete()</method>
+                <method>findByProductAndWarehouse() - проверка уникальности</method>
+                <method>findByProductId(), findByWarehouseId() - фильтрация</method>
+                <method>findLowStockItems() - низкие остатки</method>
+                <method>updateQuantity() - обновление количества</method>
+            </methods>
+        </service>
+
+        <service>
+            <class>CustomUserDetailsService</class>
+            <interface>UserDetailsService</interface>
+            <dependencies>EmployeeRepository</dependencies>
+            <purpose>Аутентификация сотрудников</purpose>
+            <authentication-flow>
+                <step>1. Получение табельного номера как username</step>
+                <step>2. Поиск сотрудника в БД</step>
+                <step>3. Извлечение фамилии из fullName как password</step>
+                <step>4. Преобразование роли в Spring Security формат</step>
+                <step>5. Создание UserDetails объекта</step>
+            </authentication-flow>
+        </service>
+    </services>
+
+    <configuration>
+        <class>SecurityConfig</class>
+        <package>com.pechenka.app.config</package>
+        <annotations>@Configuration, @EnableWebSecurity</annotations>
+        <beans>
+            <bean>SecurityFilterChain - настройка безопасности</bean>
+            <bean>DaoAuthenticationProvider - провайдер аутентификации</bean>
+            <bean>PasswordEncoder - NoOpPasswordEncoder</bean>
+        </beans>
+        <security-config>
+            <public-urls>/login, /error, /css/**, /js/**, /images/**</public-urls>
+            <admin-urls>/admin/** - требует роли ADMIN, OPERATOR, ANALYST или PICKER</admin-urls>
+            <login-config>
+                <login-page>/login</login-page>
+                <success-url>/admin/dashboard</success-url>
+                <failure-url>/login?error=true</failure-url>
+            </login-config>
+            <logout-config>
+                <logout-url>/logout</logout-url>
+                <success-url>/login?logout=true</success-url>
+            </logout-config>
+            <exception-handling>/access-denied</exception-handling>
+        </security-config>
+    </configuration>
+
+
+    <main-class>
+        <class>PechenkaRuApplication</class>
+        <package>com.pechenka.app</package>
+        <annotations>@SpringBootApplication</annotations>
+        <purpose>Точка входа Spring Boot приложения</purpose>
+        <features>
+            <feature>Автоконфигурация Spring Boot</feature>
+            <feature>Запуск встроенного сервера Tomcat</feature>
+            <feature>Вывод приветственного сообщения в консоль</feature>
+        </features>
+    </main-class>
+
+</project-documentation>

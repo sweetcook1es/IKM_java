@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Печенька.ru</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/admin/employees">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="form-container">
+        <div class="text-center mb-5">
+            <h1 class="text-gray-900">
+                <i class="bi bi-person-badge"></i>
+                <span th:if="${employee.id != null}">Редактирование сотрудника</span>
+                <span th:unless="${employee.id != null}">Добавление сотрудника</span>
+            </h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-badge"></i> Основная информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/employees}" method="post" th:object="${employee}">
+
+                    <!-- Скрытое поле для ID -->
+                    <div th:if="${employee.id != null}">
+                        <input type="hidden" th:field="*{id}" />
+                    </div>
+
+                    <!-- Табельный номер -->
+                    <div class="mb-3">
+                        <label for="personnelNumber" class="form-label required-field">Табельный номер</label>
+                        <input type="text" class="form-control" id="personnelNumber"
+                               th:field="*{personnelNumber}"
+                               th:classappend="${#fields.hasErrors('personnelNumber')} ? 'is-invalid' : ''"
+                               placeholder="EMP001"
+                               required>
+
+                        <!-- Сообщение об ошибке валидации -->
+                        <div th:if="${#fields.hasErrors('personnelNumber')}" class="invalid-feedback">
+                            <span th:each="err : ${#fields.errors('personnelNumber')}" th:text="${err}"></span>
+                        </div>
+
+                        <!-- Предупреждение об уникальности -->
+                        <div class="alert alert-warning mt-2 p-2">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            <strong>Внимание!</strong> Табельный номер должен быть уникальным.
+                            <span class="d-block mt-1">Нельзя создавать дубликаты табельных номеров!</span>
+                        </div>
+                    </div>
+
+                    <!-- ФИО -->
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label required-field">ФИО</label>
+                        <input type="text" class="form-control" id="fullName"
+                               th:field="*{fullName}"
+                               th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                               placeholder="Иванов Иван Иванович"
+                               required>
+                        <!-- Сообщение об ошибке валидации -->
+                        <div th:if="${#fields.hasErrors('fullName')}" class="invalid-feedback">
+                            <span th:each="err : ${#fields.errors('fullName')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+
+                    <!-- Роль -->
+                    <div class="mb-4">
+                        <label for="role" class="form-label required-field">Роль</label>
+                        <select class="form-select" id="role" th:field="*{role}"
+                                th:classappend="${#fields.hasErrors('role')} ? 'is-invalid' : ''" required>
+                            <option value="">Выберите роль</option>
+                            <option value="Администратор">Администратор</option>
+                            <option value="Комплектовщик">Комплектовщик</option>
+                            <option value="Оператор">Оператор</option>
+                            <option value="Аналитик">Аналитик</option>
+                        </select>
+                        <!-- Сообщение об ошибке валидации -->
+                        <div th:if="${#fields.hasErrors('role')}" class="invalid-feedback">
+                            <span th:each="err : ${#fields.errors('role')}" th:text="${err}"></span>
+                        </div>
+                        <div class="form-text">
+                            Выберите одну из доступных ролей для сотрудника
+                        </div>
+                    </div>
+
+                    <!-- Общие ошибки формы -->
+                    <div th:if="${#fields.hasErrors('global')}" class="alert alert-danger">
+                        <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
+                    </div>
+
+                    <!-- Кнопки формы -->
+                    <div class="d-flex justify-content-between">
+                        <a href="/admin/employees" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Отмена
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i>
+                            <span th:if="${employee.id != null}">Сохранить изменения</span>
+                            <span th:unless="${employee.id != null}">Добавить сотрудника</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Информационное сообщение -->
+        <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Важно:</strong> Перед сохранением проверьте, что введенный табельный номер не используется другим сотрудником.
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container text-center">
+        <p class="mb-0">© 2026 Печенька.ru - Система управления</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/app.js}"></script>
+<script>
+    // Валидация формы на клиенте
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Пожалуйста, заполните все обязательные поля');
+            }
+        });
+
+        // Удаление класса is-invalid при вводе
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            field.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+
+        // Фокус на первое поле при загрузке
+        const firstInput = form.querySelector('input[required]');
+        if (firstInput) {
+            firstInput.focus();
+        }
+    });
+</script>
+</body>
+</html>

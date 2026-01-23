@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Печенька.ru</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/admin/categories">
+            <i class="bi bi-arrow-left"></i> Все категории
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Заголовок категории -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="mb-0 text-gray-100">
+                        <i class="bi bi-tag"></i>
+                        <span th:text="${category.name}">Название категории</span>
+                    </h1>
+                    <p class="mb-0 text-gray-300" th:text="${category.description}">
+                        Описание категории
+                    </p>
+                </div>
+                <span class="badge bg-secondary fs-6 p-2">
+                    ID: <span th:text="${category.id}">0</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная информация -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Информация о категории</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr>
+                            <th width="30%" class="text-gray-700">ID категории:</th>
+                            <td th:text="${category.id}">0</td>
+                        </tr>
+                        <tr>
+                            <th class="text-gray-700">Название:</th>
+                            <td th:text="${category.name}">Название</td>
+                        </tr>
+                        <tr>
+                            <th class="text-gray-700">Описание:</th>
+                            <td>
+                                <span th:if="${category.description}" th:text="${category.description}">
+                                    Описание
+                                </span>
+                                <span th:unless="${category.description}" class="text-gray-500">
+                                    Описание отсутствует
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-gray-700">Количество товаров:</th>
+                            <td>
+                                <strong class="fs-5" th:text="${category.products != null ? category.products.size() : 0}">
+                                    0
+                                </strong> шт.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-gear"></i> Действия</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a th:href="@{'/admin/categories/' + ${category.id} + '/edit'}"
+                           class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Редактировать категорию
+                        </a>
+                        <form th:action="@{'/admin/categories/' + ${category.id} + '/delete'}"
+                              method="post">
+                            <button type="submit" class="btn btn-danger w-100"
+                                    onclick="return confirm('Удалить категорию и все связанные товары?')">
+                                <i class="bi bi-trash"></i> Удалить категорию
+                            </button>
+                        </form>
+                        <a href="/admin/categories" class="btn btn-secondary">
+                            <i class="bi bi-list"></i> К списку категорий
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Товары в категории -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-box-seam"></i> Товары в категории</h5>
+            <span class="badge bg-info" th:text="'Всего: ' + ${category.products != null ? category.products.size() : 0}">
+                Всего: 0
+            </span>
+        </div>
+        <div class="card-body">
+            <div th:if="${category.products != null and !category.products.isEmpty()}">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Название товара</th>
+                            <th>Цена</th>
+                            <th>Действия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${category.products}">
+                            <td th:text="${product.id}">1</td>
+                            <td>
+                                <strong th:text="${product.name}">Название товара</strong>
+                                <div class="text-gray-500 small" th:text="${product.description}">
+                                    Описание товара
+                                </div>
+                            </td>
+                            <td th:text="${'₽' + product.price}">0 ₽</td>
+                            <td>
+                                <a th:href="@{'/admin/products/' + ${product.id}}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Просмотр
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div th:if="${category.products == null or category.products.isEmpty()}"
+                 class="text-center py-4 text-gray-500">
+                <i class="bi bi-box fs-1 mb-3"></i>
+                <h5>В этой категории нет товаров</h5>
+                <p>Добавьте первый товар в категорию</p>
+                <a href="/admin/products/new" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Добавить товар
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container text-center">
+        <p class="mb-0">© 2026 Печенька.ru - Система управления</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
