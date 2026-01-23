@@ -82,57 +82,94 @@
 src/
 ├── main/
 │   ├── java/
-│   │   └── com/pechenka/webapp/
+│   │   └── com/pechenka/app/
 │   │       ├── PechenkaRuApplication.java
 │   │       ├── config/
-│   │       │   ├── MvcConfig.java
 │   │       │   └── SecurityConfig.java
 │   │       ├── controller/
-│   │       │   ├── HomeController.java
+│   │       │   ├── AuthController.java
 │   │       │   ├── CategoryController.java
+│   │       │   ├── CustomerController.java
+│   │       │   ├── CustomErrorController.java
+│   │       │   ├── DashboardController.java
+│   │       │   ├── EmployeeController.java
+│   │       │   ├── OrderController.java
+│   │       │   ├── OrderStatusController.java
 │   │       │   ├── ProductController.java
 │   │       │   ├── StockController.java
-│   │       │   └── WarehouseController.java
+│   │       │   ├── WarehouseController.java
+│   │       │   └── WarehouseOperationController.java
 │   │       ├── entity/
 │   │       │   ├── Category.java
+│   │       │   ├── Customer.java
+│   │       │   ├── Employee.java
+│   │       │   ├── Order.java
+│   │       │   ├── OrderItem.java
+│   │       │   ├── OrderStatus.java
 │   │       │   ├── Product.java
 │   │       │   ├── Stock.java
-│   │       │   └── Warehouse.java
-│   │       ├── service/
-│   │       │   ├── CategoryService.java
-│   │       │   ├── ProductService.java
-│   │       │   ├── StockService.java
-│   │       │   └── WarehouseService.java
+│   │       │   ├── Warehouse.java
+│   │       │   └── WarehouseOperation.java
 │   │       ├── repository/
 │   │       │   ├── CategoryRepository.java
+│   │       │   ├── CustomerRepository.java
+│   │       │   ├── EmployeeRepository.java
+│   │       │   ├── OrderRepository.java
+│   │       │   ├── OrderStatusRepository.java
 │   │       │   ├── ProductRepository.java
 │   │       │   ├── StockRepository.java
+│   │       │   ├── WarehouseOperationRepository.java
 │   │       │   └── WarehouseRepository.java
-│   │       └── exception/
-│   │           └── GlobalExceptionHandler.java
+│   │       └── service/
+│   │           ├── CategoryService.java
+│   │           ├── CustomerService.java
+│   │           ├── CustomUserDetailsService.java
+│   │           ├── EmployeeService.java
+│   │           ├── OrderService.java
+│   │           ├── OrderStatusService.java
+│   │           ├── ProductService.java
+│   │           ├── StockService.java
+│   │           ├── WarehouseOperationService.java
+│   │           └── WarehouseService.java
 │   └── resources/
+│       ├── application.properties
 │       ├── static/
 │       │   ├── css/
 │       │   │   └── style.css
 │       │   └── js/
-│       │       └── main.js
-│       ├── templates/
-│       │   ├── categories/
-│       │   │   ├── list.html
-│       │   │   └── form.html
-│       │   ├── products/
-│       │   │   ├── list.html
-│       │   │   └── form.html
-│       │   ├── stock/
-│       │   │   ├── list.html
-│       │   │   └── form.html
-│       │   ├── warehouses/
-│       │   │   ├── list.html
-│       │   │   └── form.html
-│       │   ├── index.html
-│       │   ├── login.html
-│       │   └── error.html
-│       └── application.properties
+│       │       └── app.js
+│       └── templates/
+│           ├── admin/
+│           │   ├── categories/
+│           │   │   ├── form.html
+│           │   │   ├── list.html
+│           │   │   └── view.html
+│           │   ├── customers/
+│           │   │   ├── form.html
+│           │   │   ├── list.html
+│           │   │   └── view.html
+│           │   ├── employees/
+│           │   │   ├── form.html
+│           │   │   ├── list.html
+│           │   │   └── view.html
+│           │   ├── orders/
+│           │   │   ├── list.html
+│           │   │   └── view.html
+│           │   ├── products/
+│           │   │   ├── form.html
+│           │   │   ├── list.html
+│           │   │   └── view.html
+│           │   ├── stock/
+│           │   │   ├── form.html
+│           │   │   └── list.html
+│           │   └── warehouses/
+│           │       ├── dashboard.html
+│           │       ├── form.html
+│           │       ├── list.html
+│           │       └── view.html
+│           └── auth/
+│               ├── login.html
+│               └── error.html
 ```
 
 ## Структура базы данных:
