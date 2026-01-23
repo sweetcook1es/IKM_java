@@ -139,7 +139,9 @@ src/
 │       │   └── js/
 │       │       └── app.js
 │       └── templates/
+│           ├── error.html
 │           ├── admin/
+│           │   ├── dashboard.html
 │           │   ├── categories/
 │           │   │   ├── form.html
 │           │   │   ├── list.html
@@ -163,13 +165,11 @@ src/
 │           │   │   ├── form.html
 │           │   │   └── list.html
 │           │   └── warehouses/
-│           │       ├── dashboard.html
 │           │       ├── form.html
 │           │       ├── list.html
 │           │       └── view.html
 │           └── auth/
-│               ├── login.html
-│               └── error.html
+│               └── login.html
 ```
 
 ## Структура базы данных:
