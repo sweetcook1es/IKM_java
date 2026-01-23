@@ -77,6 +77,7 @@ src/
 ├── main/
 │   ├── java/
 │   │   └── com/pechenka/app/
+│   │       ├── ProjectDocumentation.xml
 │   │       ├── PechenkaRuApplication.java
 │   │       ├── config/
 │   │       │   └── SecurityConfig.java
